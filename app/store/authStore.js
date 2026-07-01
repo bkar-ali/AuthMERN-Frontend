@@ -2,7 +2,8 @@ import { create } from "zustand";
 import axios from "axios";
 import { getStrength } from "../utils/PasswordStrength";
 
-const apiUrl = "http://localhost:5000/api/auth"; // Change this to your backend URL
+const apiUrl = "https://authmern-backend-production.up.railway.app/api/auth";
+// const apiUrl = "http://localhost:5000/api/auth"; // Change this to your backend URL
 
 axios.defaults.withCredentials = true;
 
