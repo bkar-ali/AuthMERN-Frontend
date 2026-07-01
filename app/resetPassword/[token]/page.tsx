@@ -6,6 +6,7 @@ import { useParams, useRouter } from "next/navigation";
 import Input from "../../components/Input";
 import { CiLock } from "react-icons/ci";
 import toast from "react-hot-toast";
+import PasswordStrengthMeter from "@/app/components/PasswordStrengthMeter";
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState("");
@@ -22,7 +23,6 @@ const ResetPasswordPage = () => {
       toast.error("Passwords do not match");
       return;
     }
-
     try {
       await resetPassword(token, password);
 
@@ -34,7 +34,6 @@ const ResetPasswordPage = () => {
       }, 500);
     } catch (error) {
       console.error(error);
-      toast.error("Error resetting password");
     }
   };
 
@@ -49,7 +48,7 @@ const ResetPasswordPage = () => {
         <h2 className="text-3xl font-bold mb-6 text-center bg-linear-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
           Reset Password
         </h2>
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
         {message && <p className="text-green-500 text-sm mb-4">{message}</p>}
 
         <form onSubmit={handleSubmit}>
@@ -70,11 +69,13 @@ const ResetPasswordPage = () => {
             onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          <PasswordStrengthMeter password={password} />
 
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full py-3 px-4 bg-linear-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
+            className="w-full py-3 px-4 mt-5 bg-linear-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200"
             type="submit"
             disabled={isLoading}
           >

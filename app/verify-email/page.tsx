@@ -72,9 +72,9 @@ const Page = () => {
       e.preventDefault();
       const verificationCode = code.join("");
       try {
-        verifyEmail(verificationCode);
+        await verifyEmail(verificationCode);
         toast.success("Email verified successfully");
-        router.replace("/");
+        router.push("/dashboard");
       } catch (error) {
         console.log(error);
         toast.error("Invalid verification code. Please try again.");

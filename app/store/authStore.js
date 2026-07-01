@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
+import { getStrength } from "../utils/PasswordStrength";
 
 const apiUrl = "http://localhost:5000/api/auth"; // Change this to your backend URL
 
@@ -15,6 +16,13 @@ export const useAuthStore = create((set) => ({
   signup: async (name, email, password) => {
     set({ isLoading: true, error: null });
     try {
+      if (!name || !email || !password) {
+        throw new Error("All fields are required");
+      }
+
+      if (getStrength(password) <= 3) {
+        throw new Error("Password must be strong");
+      }
       const res = await axios.post(`${apiUrl}/signup`, {
         email,
         password,
@@ -26,6 +34,7 @@ export const useAuthStore = create((set) => ({
         error:
           error.response?.data?.message ||
           error.response?.data?.error ||
+          error.message ||
           "Signup failed",
         isLoading: false,
       });
@@ -132,6 +141,9 @@ export const useAuthStore = create((set) => ({
   resetPassword: async (token, newPassword) => {
     set({ isLoading: true, error: null });
     try {
+      if (getStrength(newPassword) < 3) {
+        throw new Error("Password must be strong");
+      }
       const res = await axios.post(`${apiUrl}/reset-password/${token}`, {
         newPassword,
       });
@@ -141,6 +153,7 @@ export const useAuthStore = create((set) => ({
         error:
           error.response?.data?.message ||
           error.response?.data?.error ||
+          error.message ||
           "Failed to reset password",
         isLoading: false,
       });
